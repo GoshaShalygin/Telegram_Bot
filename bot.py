@@ -149,12 +149,15 @@ def main():
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
+    # Получаем порт из переменной окружения
+    port = int(os.getenv("PORT", "8443"))  # По умолчанию 8443, если PORT не указан
+
     # Запуск вебхука
     application.run_webhook(
         listen="0.0.0.0",  # Слушаем все интерфейсы
-        port=8443,  # Порт для прослушивания
+        port=port,  # Используем порт из переменной окружения
         url_path=TELEGRAM_TOKEN,  # Путь для вебхука
-        webhook_url="https://your-domain.com/" + TELEGRAM_TOKEN  # URL вашего сервера
+        webhook_url="https://my-telegram-bot.onrender.com/" + TELEGRAM_TOKEN  # URL вашего сервера
     )
 
 if __name__ == '__main__':
