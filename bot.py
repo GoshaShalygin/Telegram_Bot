@@ -1,8 +1,8 @@
 import logging
 import asyncio
 import aiohttp
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
-from telegram.ext import Application, CommandHandler, ContextTypes, CallbackContext, CallbackQueryHandler, MessageHandler, filters
+from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
+from telegram.ext import Application, CommandHandler, ContextTypes, CallbackContext, MessageHandler, filters
 from datetime import time
 from pytz import timezone
 from pyowm import OWM
@@ -37,7 +37,7 @@ async def get_currency_rates():
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 response.raise_for_status()
-                data = await response.json(content_type=None)  # Игнорируем Content-Type
+                data = await response.json(content_type=None)
                 rates = data['Valute']
                 usd = rates['USD']['Value']
                 eur = rates['EUR']['Value']
@@ -144,9 +144,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 def main():
     application = Application.builder().token(TELEGRAM_TOKEN).build()
+
+    # Добавляем обработчики команд
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    application.run_polling()
+
+    # Запуск вебхука
+    application.run_webhook(
+        listen="0.0.0.0",  # Слушаем все интерфейсы
+        port=8443,  # Порт для прослушивания
+        url_path=TELEGRAM_TOKEN,  # Путь для вебхука
+        webhook_url="https://your-domain.com/" + TELEGRAM_TOKEN  # URL вашего сервера
+    )
 
 if __name__ == '__main__':
     main()
