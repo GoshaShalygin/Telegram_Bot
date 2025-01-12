@@ -1,0 +1,6 @@
+aiohttp==3.8.4
+beautifulsoup4==4.11.1
+lxml==4.9.1
+pyowm==3.3.0
+pytz==2022.7
+python-telegram-bot==20.0
