@@ -13,8 +13,8 @@ import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Токены (лучше использовать переменные окружения)
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', '7878119938:AAEH6XLQQuyjKK21hug2vMtunPUJOu3ocwo')
-OWM_API_KEY = os.getenv('OWM_API_KEY', '6b4136828d19d7a18077ac1cc67f9f3e')
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', '')
+OWM_API_KEY = os.getenv('OWM_API_KEY', '')
 
 # Асинхронные функции для получения данных
 async def get_news():
